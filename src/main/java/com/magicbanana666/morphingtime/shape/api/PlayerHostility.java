@@ -1,0 +1,27 @@
+package com.magicbanana666.morphingtime.shape.api;
+
+import com.magicbanana666.morphingtime.shape.impl.PlayerDataProvider;
+import net.minecraft.world.entity.player.Player;
+
+public class PlayerHostility {
+
+    /**
+     * Returns whether the player this component is attached to will be targeted by hostile mobs, regardless of their shape.
+     *
+     * <p>Hostility works on a timer, and is set when the player attacks a hostile mob.
+     *
+     * @return whether this component's player will be targeted by hostile mobs, regardless of their shape
+     */
+    public static boolean hasHostility(Player player) {
+        return ((PlayerDataProvider) player).shape$getRemainingHostilityTime() > 0;
+    }
+
+    /**
+     * Sets this components' hostility timer to the given time in ticks.
+     *
+     * @param hostilityTime time, in ticks, to set hostility timer to
+     */
+    public static void set(Player player, int hostilityTime) {
+        ((PlayerDataProvider) player).shape$setRemainingHostilityTime(hostilityTime);
+    }
+}

@@ -1,0 +1,7 @@
+{
+  "skinshifter.command.set": "Set the skin of %s to %s.",
+  "skinshifter.command.reset": "Reset the skin of %s.",
+  "skinshifter.command.invalid_uri": "Invalid skin URL.",
+  "skinshifter.command.failed": "Failed to set skin of %s to %s.",
+  "skinshifter.invalid_player": "Invalid Player Name: %s"
+}

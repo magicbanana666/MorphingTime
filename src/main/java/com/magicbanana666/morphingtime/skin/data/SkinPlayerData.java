@@ -1,0 +1,116 @@
+package com.magicbanana666.morphingtime.skin.data;
+
+import com.mojang.authlib.GameProfile;
+import com.mojang.logging.LogUtils;
+import com.mojang.serialization.Codec;
+import com.magicbanana666.morphingtime.core.platform.PlatformData;
+import com.magicbanana666.morphingtime.core.registration.PlayerDataRegistry;
+import com.magicbanana666.morphingtime.skin.PlayerSkins;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.ClientAsset;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.ProfileResolver;
+import net.minecraft.util.Util;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.PlayerModelType;
+import net.minecraft.world.entity.player.PlayerSkin;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
+@ApiStatus.Internal
+public class SkinPlayerData {
+    public static final String SKIN_TAG_NAME = "CurrentSkin";
+    public static final String URI_TAG_NAME = "CurrentSkinURI";
+
+    public static void initialize() {
+        PlayerDataRegistry.registerKey(SKIN_TAG_NAME, Codec.STRING, true, true);
+        PlayerDataRegistry.registerKey(URI_TAG_NAME, CompoundTag.CODEC, true, true);
+    }
+
+    public static @NotNull Optional<GameProfile> getSkinProfile(Player player) {
+        // Get the ProfileResolver for the current side
+        final ProfileResolver profileResolver = switch (PlatformData.getEnv()) {
+            case CLIENT -> Minecraft.getInstance().services().profileResolver();
+            case SERVER -> ((ServerPlayer) player).level().getServer().services().profileResolver();
+        };
+
+        UUID uuid = PlayerSkins.getCurrentSkin(player);
+        if (uuid != player.getUUID()) {
+            return getSkinProfile(profileResolver, uuid);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public static @NotNull Optional<GameProfile> getSkinProfile(ProfileResolver profileResolver, Player player) {
+        UUID uuid = PlayerSkins.getCurrentSkin(player);
+        if (uuid != player.getUUID()) {
+            return getSkinProfile(profileResolver, uuid);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public static @NotNull Optional<GameProfile> getSkinProfile(ProfileResolver profileResolver, UUID uuid) {
+        return profileResolver.fetchById(uuid);
+    }
+
+    public static @NotNull Optional<GameProfile> getSkinProfile(ProfileResolver profileResolver, String name) {
+        return profileResolver.fetchByName(name);
+    }
+
+    
+    public static @NotNull CompletableFuture<Optional<PlayerSkin>> getPlayerSkin(ProfileResolver profileResolver, Player player) {
+        CompletableFuture<Optional<GameProfile>> profileFuture = CompletableFuture.completedFuture(getSkinProfile(profileResolver, player));
+        return profileFuture.thenCompose(profile -> profile.map(gameProfile -> Minecraft.getInstance().getSkinManager().get(gameProfile)).orElse(new CompletableFuture<>())).thenApply(skin -> {
+            if (skin.isEmpty()) {
+                // test if there is a url
+                Optional<CompoundTag> currentUriTag = Optional.ofNullable(PlayerDataRegistry.readTag(player, URI_TAG_NAME, CompoundTag.class));
+                if (currentUriTag.isPresent()) {
+                    String uri = currentUriTag.get().getStringOr("uri", "");
+                    boolean slim = currentUriTag.get().getBooleanOr("slim", false);
+
+                    if (!uri.isEmpty()) {
+                        try {
+                            URL url = URI.create(uri).toURL();
+                            Optional<Identifier> id = TextureCache.loadSkinTexture(url);
+
+                            if (id.isPresent()) {
+                                return Optional.of(new PlayerSkin(new ClientAsset.ResourceTexture(id.get()), null, null, slim ? PlayerModelType.SLIM : PlayerModelType.WIDE, true));
+                            }
+                        } catch (MalformedURLException e) {
+                            LogUtils.getLogger().error("Invalid URI specified: {}", uri, e);
+                        }
+                    }
+                }
+                return Optional.empty();
+            }
+            return skin;
+        });
+    }
+
+    public static void setSkin(ServerPlayer player, @Nullable UUID orgSkinUUID) {
+        PlayerDataRegistry.writeTag(player, SKIN_TAG_NAME, orgSkinUUID != null ? orgSkinUUID.toString() : "");
+    }
+
+    public static void setSkinURI(ServerPlayer player, @Nullable String uri, boolean slim) {
+        if (uri != null) {
+            CompoundTag tag = new CompoundTag();
+            tag.putString("uri", uri);
+            tag.putBoolean("slim", slim);
+            PlayerDataRegistry.writeTag(player, URI_TAG_NAME, tag);
+        } else {
+            PlayerDataRegistry.writeTag(player, URI_TAG_NAME, new CompoundTag());
+        }
+    }
+}
