@@ -1,0 +1,56 @@
+package com.magicbanana666.morphingtime.skin.data;
+
+import com.mojang.blaze3d.platform.NativeImage;
+import com.mojang.logging.LogUtils;
+import com.magicbanana666.morphingtime.skin.PlayerSkins;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+
+
+public class TextureCache {
+    private static final Map<String, Optional<Identifier>> LOADED_TEXTURES = new ConcurrentHashMap<>();
+    private static String failedUrl = "";
+
+    public static Optional<Identifier> loadSkinTexture(@NotNull URL textureURL) {
+        Identifier location = Identifier.fromNamespaceAndPath(
+                PlayerSkins.MODID,
+                "textures/player/skin_" + textureURL.hashCode() + ".png"
+        );
+
+        return LOADED_TEXTURES.computeIfAbsent(location.toString(), url -> {
+            Identifier id = location.withPath(string -> "textures/" + string + ".png");
+
+            try (InputStream is = textureURL.openStream()) {
+                NativeImage image = NativeImage.read(new ByteArrayInputStream(is.readAllBytes()));
+
+                DynamicTexture dynamicTexture = new DynamicTexture(id::toString, image);
+
+                Minecraft.getInstance().getTextureManager().register(id, dynamicTexture);
+                return Optional.of(location); // success
+            } catch (IOException e) {
+                if (!Objects.equals(failedUrl, url)) { // only log once
+                    LogUtils.getLogger().error("Failed to load texture from URL: {}", url, e);
+                    // show in chat
+                    if (Minecraft.getInstance().player != null) {
+                        Minecraft.getInstance().player.sendSystemMessage(Component.translatable("skinshifter.command.invalid_uri").withColor(0xFF0000));
+                    }
+
+                    failedUrl = url;
+                }
+                return Optional.empty(); // permanently cache the failure
+            }
+        });
+    }
+}

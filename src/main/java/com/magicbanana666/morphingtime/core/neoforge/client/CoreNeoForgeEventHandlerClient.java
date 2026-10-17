@@ -1,0 +1,69 @@
+package com.magicbanana666.morphingtime.core.neoforge.client;
+
+import com.magicbanana666.morphingtime.core.event.client.ClientPlayerEvents;
+import com.magicbanana666.morphingtime.core.event.client.ClientTickEvents;
+import com.magicbanana666.morphingtime.core.event.client.RenderEvents;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.InteractionResult;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.RenderGuiEvent;
+import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+
+@SuppressWarnings("unused")
+@ApiStatus.Internal
+
+public class CoreNeoForgeEventHandlerClient {
+    @SubscribeEvent
+    public void event(RenderGuiEvent.@NotNull Post event) {
+        RenderEvents.HUD_RENDERING.invoke().extractRenderState(event.getGuiGraphics(), event.getPartialTick());
+    }
+
+    @SubscribeEvent
+    public void event(ClientTickEvent.Pre event) {
+        ClientTickEvents.CLIENT_PRE.invoke().tick(Minecraft.getInstance());
+    }
+
+    @SubscribeEvent
+    public void event(ClientTickEvent.Post event) {
+        ClientTickEvents.CLIENT_POST.invoke().tick(Minecraft.getInstance());
+    }
+
+    @SubscribeEvent
+    public void event(RenderGuiLayerEvent.@NotNull Pre event) {
+        switch (event.getName().getPath()) {
+            case "player_health" -> {
+                InteractionResult result = RenderEvents.RENDER_HEALTH.invoke().render(event.getGuiGraphics(), Minecraft.getInstance().player);
+                if (result == InteractionResult.FAIL) {
+                    event.setCanceled(true);
+                }
+            }
+            case "food_level" -> {
+                InteractionResult result = RenderEvents.RENDER_FOOD.invoke().render(event.getGuiGraphics(), Minecraft.getInstance().player);
+                if (result == InteractionResult.FAIL) {
+                    event.setCanceled(true);
+                }
+            }
+            case "air_level" -> {
+                InteractionResult result = RenderEvents.RENDER_BREATH.invoke().render(event.getGuiGraphics(), Minecraft.getInstance().player);
+                if (result == InteractionResult.FAIL) {
+                    event.setCanceled(true);
+                }
+            }
+            case "vehicle_health" -> {
+                InteractionResult result = RenderEvents.RENDER_MOUNT_HEALTH.invoke().render(event.getGuiGraphics(), Minecraft.getInstance().player);
+                if (result == InteractionResult.FAIL) {
+                    event.setCanceled(true);
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void event(ClientPlayerNetworkEvent.@NotNull LoggingOut event) {
+        ClientPlayerEvents.CLIENT_PLAYER_QUIT.invoke().quit(event.getPlayer());
+    }
+}
