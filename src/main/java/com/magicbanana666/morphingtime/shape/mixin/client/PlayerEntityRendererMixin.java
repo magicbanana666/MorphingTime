@@ -30,7 +30,7 @@ import net.minecraft.resources.Identifier;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.Avatar;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -129,7 +129,7 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
         if (shape instanceof Mob mob) {
             mob.setAggressive(player.isUsingItem());
             mob.setNoAi(true);
-            if (mob instanceof EnderMan enderMan) {
+            if (mob instanceof Enderman enderMan) {
                 ItemStack heldStack = player.getMainHandItem();
 
                 if (heldStack.getItem() instanceof BlockItem) {
@@ -193,13 +193,13 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
 
             if (livingState instanceof ArmedEntityRenderState armedState) {
                 armedState.mainArm = player.mainArm;
+                armedState.currentSwing = player.currentSwing;
+                armedState.swingAnimation = player.swingAnimation;
             }
 
             if (shape instanceof HumanoidRenderState humanoidShape) {
                 humanoidShape.swimAmount = player.swimAmount;
                 humanoidShape.isVisuallySwimming = player.isVisuallySwimming;
-                humanoidShape.attackArm = player.attackArm;
-                humanoidShape.attackTime = player.attackTime;
                 humanoidShape.speedValue = player.speedValue;
                 humanoidShape.isCrouching = player.isCrouching;
                 humanoidShape.ticksUsingItem = player.ticksUsingItem;
@@ -307,7 +307,7 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
                             arm = pair.getFirst();
                             // mirror matrices if the player is left-handed
                             if (player.getMainArm() == HumanoidArm.LEFT) {
-                                matrices.mulPose(Maths.getDegreesQuaternion(Maths.POSITIVE_Y(), 180));
+                                matrices.rotate(Maths.getDegreesQuaternion(Maths.POSITIVE_Y(), 180));
                             }
                             pair.getSecond().run(matrices, model);
                             matrices.translate(0, -.35, .5);

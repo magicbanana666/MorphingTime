@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -47,7 +48,7 @@ public class RandomTeleportationAbility<T extends LivingEntity> extends GenericS
             }
 
             // Teleport the player and play sound FX if it succeeds.
-            if (player.randomTeleport(g, h, j, true)) {
+            if (player.randomTeleport(g, h, j, true, BlockTags.CONSUMABLE_DOES_NOT_TELEPORT_TO)) {
                 SoundEvent soundEvent = SoundEvents.CHORUS_FRUIT_TELEPORT;
                 world.playSound(null, x, y, z, soundEvent, SoundSource.PLAYERS, 1.0F, 1.0F);
                 player.playSound(soundEvent, 1.0F, 1.0F);

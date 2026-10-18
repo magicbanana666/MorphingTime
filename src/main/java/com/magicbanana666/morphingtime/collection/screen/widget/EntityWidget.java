@@ -1,6 +1,6 @@
 package com.magicbanana666.morphingtime.collection.screen.widget;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.magicbanana666.morphingtime.collection.MorphCollection;
 import com.magicbanana666.morphingtime.collection.network.NetworkHandler;

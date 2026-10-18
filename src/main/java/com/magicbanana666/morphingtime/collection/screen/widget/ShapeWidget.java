@@ -17,7 +17,7 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -219,7 +219,7 @@ public abstract class ShapeWidget extends AbstractButton {
 
     @Override
     public boolean keyPressed(@NotNull KeyEvent event) {
-        if (this.active && this.visible && isHovered() && event.key() == GLFW.GLFW_KEY_X && availability != -1) {
+        if (this.active && this.visible && isHovered() && event.key() == InputConstants.KEY_X && availability != -1) {
             deletePoint();
             return true;
         }

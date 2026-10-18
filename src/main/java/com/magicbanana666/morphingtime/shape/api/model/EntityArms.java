@@ -128,16 +128,16 @@ public class EntityArms {
                 (stack, model) -> stack.translate(0, -0.5, 0));
         register(BlazeModel.class, (blaze, model) -> ((BlazeEntityModelAccessor) model).getUpperBodyParts()[10],
                 (stack, model) -> {
-                    stack.mulPose(Maths.getDegreesQuaternion(Maths.POSITIVE_Z(), 45));
-                    stack.mulPose(Maths.getDegreesQuaternion(Maths.POSITIVE_Y(), -15));
-                    stack.mulPose(Maths.getDegreesQuaternion(Maths.POSITIVE_X(), -25));
+                    stack.rotate(Maths.getDegreesQuaternion(Maths.POSITIVE_Z(), 45));
+                    stack.rotate(Maths.getDegreesQuaternion(Maths.POSITIVE_Y(), -15));
+                    stack.rotate(Maths.getDegreesQuaternion(Maths.POSITIVE_X(), -25));
                     stack.translate(0, 0, -.25);
                 });
         register(AdultOcelotModel.class, (ocelot, model) -> ((OcelotEntityModelAccessor) model).getRightFrontLeg());
         register(SpiderModel.class, (spider, model) -> ((SpiderEntityModelAccessor) model).getRightFrontLeg(),
                 (stack, model) -> {
-                    stack.mulPose(Maths.getDegreesQuaternion(Maths.POSITIVE_Y(), -15));
-                    stack.mulPose(Maths.getDegreesQuaternion(Maths.POSITIVE_X(), 15));
+                    stack.rotate(Maths.getDegreesQuaternion(Maths.POSITIVE_Y(), -15));
+                    stack.rotate(Maths.getDegreesQuaternion(Maths.POSITIVE_X(), 15));
                     stack.translate(0, 0, 0);
                 });
         register(IronGolemModel.class,
@@ -157,7 +157,7 @@ public class EntityArms {
         // something between specific & generic
         register(HorseModel.class, new GenericEntityArm<>(),
                 (stack, model) -> {
-                    stack.mulPose(Maths.getDegreesQuaternion(Maths.POSITIVE_Y(), -15));
+                    stack.rotate(Maths.getDegreesQuaternion(Maths.POSITIVE_Y(), -15));
                     stack.translate(0, -.25, .25);
                 });
         register(CamelModel.class, new GenericEntityArm<>(),
@@ -195,7 +195,7 @@ public class EntityArms {
         register(EntityTypes.PILLAGER,
                 (pillager, model) -> ((IllagerEntityModelAccessor) model).getRightArm(),
                 (stack, model) -> {
-                    stack.mulPose(Maths.getDegreesQuaternion(Maths.POSITIVE_X(), -10));
+                    stack.rotate(Maths.getDegreesQuaternion(Maths.POSITIVE_X(), -10));
                     stack.translate(0, .5, -.3);
                 });
     }
