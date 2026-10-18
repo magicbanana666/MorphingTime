@@ -58,7 +58,7 @@ public final class UnlockGhosts {
             livingState.hasRedOverlay = false;
         }
         CameraRenderState camera = new CameraRenderState();
-        camera.pos = minecraft.gameRenderer.getMainCamera().position();
+        camera.pos = minecraft.gameRenderer.mainCamera().position();
         List<CapturedCube> cubes = MorphTransitions.captureShape(renderer, state, camera);
         if (!cubes.isEmpty()) {
             GHOSTS.add(new Ghost(cubes, living.position(), living.getBbHeight(), minecraft.level.getGameTime()));

@@ -20,7 +20,8 @@ import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.model.player.PlayerModel;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.model.Model;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
@@ -51,8 +52,8 @@ public class MorphMenu extends Screen {
     private final Map<ShapeType<?>, Mob> renderEntities = new ConcurrentHashMap<>();
     private final Map<GameProfile, PlayerSkin> renderPlayers = new ConcurrentHashMap<>();
 
-    private final PlayerModel MODEL_WIDE = new PlayerModel(minecraft.getEntityModels().bakeLayer(ModelLayers.PLAYER), false);
-    private final PlayerModel MODEL_SLIM = new PlayerModel(minecraft.getEntityModels().bakeLayer(ModelLayers.PLAYER), true);
+    private final Model.Simple MODEL_WIDE = new Model.Simple(minecraft.getEntityModels().bakeLayer(ModelLayers.PLAYER), RenderTypes::entityTranslucent);
+    private final Model.Simple MODEL_SLIM = new Model.Simple(minecraft.getEntityModels().bakeLayer(ModelLayers.PLAYER_SLIM), RenderTypes::entityTranslucent);
 
 
     private final SearchWidget searchBar = createSearchBar();
@@ -359,7 +360,7 @@ public class MorphMenu extends Screen {
     }
 
     private @NotNull Button createHelpButton() {
-        Button.Builder helpButton = Button.builder(Component.nullToEmpty("?"), (widget) -> Minecraft.getInstance().setScreen(new MorphHelpScreen()));
+        Button.Builder helpButton = Button.builder(Component.nullToEmpty("?"), (widget) -> Minecraft.getInstance().gui.setScreen(new MorphHelpScreen()));
 
         helpButton.size(20, 20);
         helpButton.tooltip(Tooltip.create(Component.translatable(MorphCollection.MODID + ".help")));
@@ -385,7 +386,7 @@ public class MorphMenu extends Screen {
 
     private @NotNull Button createLegendButton() {
         Component text = Component.translatable("remorphed.legend");
-        Button.Builder legendButton = Button.builder(text, (widget) -> Minecraft.getInstance().setScreen(new TraitLegendScreen()));
+        Button.Builder legendButton = Button.builder(text, (widget) -> Minecraft.getInstance().gui.setScreen(new TraitLegendScreen()));
 
         legendButton.size(Minecraft.getInstance().font.width(text) + 12, 20);
         legendButton.tooltip(Tooltip.create(Component.translatable("remorphed.legend.tooltip")));

@@ -11,7 +11,7 @@ base.archivesName = mod_name
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 // Keep build output out of OneDrive (it locks files while syncing)
-layout.buildDirectory = file("${System.getProperty('user.home')}/.gradle-builds/${project.name}")
+layout.buildDirectory = file("${System.getProperty('user.home')}/.gradle-builds/${project.name}-${minecraft_version}")
 
 dependencies {
     // -PwithHats: also run Hats Reinvented in the dev client (to test the hat on morphs)
@@ -36,7 +36,7 @@ neoForge {
 
     runs {
         configureEach {
-            gameDirectory = file("${System.getProperty('user.home')}/.gradle-builds/${project.name}/run")
+            gameDirectory = file("${System.getProperty('user.home')}/.gradle-builds/${project.name}-${minecraft_version}/run")
             logLevel = org.slf4j.event.Level.INFO
         }
         client {

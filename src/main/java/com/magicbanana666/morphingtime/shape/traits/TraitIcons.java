@@ -5,7 +5,7 @@ import com.magicbanana666.morphingtime.shape.ShapesClient;
 import com.magicbanana666.morphingtime.shape.ability.ShapeAbility;
 import com.magicbanana666.morphingtime.shape.traits.impl.*;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.Holder;
@@ -62,7 +62,7 @@ public final class TraitIcons {
                 graphics.blit(RenderPipelines.GUI_TEXTURED, category.badge(), x, y, 0, 0, size, size, SIZE, SIZE, SIZE, SIZE);
                 if (effect != null) {
                     int inset = size / SIZE;
-                    graphics.blitSprite(RenderPipelines.GUI_TEXTURED, Gui.getMobEffectSprite(effect), x + inset, y + inset, size - 2 * inset, size - 2 * inset);
+                    graphics.blitSprite(RenderPipelines.GUI_TEXTURED, Hud.getMobEffectSprite(effect), x + inset, y + inset, size - 2 * inset, size - 2 * inset);
                 }
             }
         }

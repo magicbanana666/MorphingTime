@@ -27,4 +27,7 @@ public interface EntityAccessor {
 
     @Invoker
     String callGetEncodeId();
+
+    @Invoker("omnidirectionalAirMover")
+    boolean shape_callOmnidirectionalAirMover();
 }

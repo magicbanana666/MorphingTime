@@ -14,7 +14,7 @@ public class KeyPressHandler implements ClientTickEvents.Client {
         if (MorphCollectionClient.MENU_KEY.consumeClick()) {
             // Open menu directly - menu access is not restricted by permissions
             // as it can be easily bypassed client-side
-            Minecraft.getInstance().setScreen(new MorphMenu());
+            Minecraft.getInstance().gui.setScreen(new MorphMenu());
         }
     }
 }

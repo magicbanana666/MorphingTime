@@ -10,6 +10,7 @@ import com.magicbanana666.morphingtime.shape.network.impl.UnlockPackets;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Enemy;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +35,7 @@ public class UnlockShapeCallback implements ShapeEvents.UnlockShapeCallback {
             }
             // Otherwise only allow shapes that were unlocked through kills
             if (!MorphCollection.canUseShape(player, eType)) {
-                if (!eType.equals(EntityType.WOLF) || !Shapes.hasSpecialShape(player.getUUID())) {
+                if (!eType.equals(EntityTypes.WOLF) || !Shapes.hasSpecialShape(player.getUUID())) {
                     return InteractionResult.FAIL;
                 }
             }

@@ -16,6 +16,7 @@ import com.magicbanana666.morphingtime.shape.eventhandler.RespawnHandler;
 import com.magicbanana666.morphingtime.shape.eventhandler.ShapeEventHandlers;
 import com.magicbanana666.morphingtime.shape.integrations.Integrations;
 import com.magicbanana666.morphingtime.shape.mixin.ThreadedAnvilChunkStorageAccessor;
+import com.magicbanana666.morphingtime.shape.mixin.accessor.EntityAccessor;
 import com.magicbanana666.morphingtime.shape.network.ServerNetworking;
 import com.magicbanana666.morphingtime.shape.traits.TraitRegistry;
 import com.magicbanana666.morphingtime.shape.traits.impl.FlyingTrait;
@@ -26,9 +27,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.animal.FlyingAnimal;
+import net.minecraft.world.entity.monster.cubemob.AbstractCubeMob;
 import net.minecraft.world.level.GameType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -113,6 +115,15 @@ public class Shapes {
         return Identifier.fromNamespaceAndPath(MODID, name);
     }
 
+    /**
+     * Mobs that fly freely through the air (bees, parrots and modded flyers). They used to implement FlyingAnimal,
+     * which is gone since 26.2: such mobs now override Entity#omnidirectionalAirMover. Cube mobs are left out, sulfur
+     * cubes only use it while they carry a block.
+     */
+    public static boolean isFlyingAnimal(@NotNull Entity entity) {
+        return !(entity instanceof AbstractCubeMob) && ((EntityAccessor) entity).shape_callOmnidirectionalAirMover();
+    }
+
     public static boolean hasFlyingPermissions(@NotNull ServerPlayer player) {
         return hasFlyingPermissions(player, player.gameMode.getGameModeForPlayer());
     }
@@ -125,7 +136,7 @@ public class Shapes {
         LivingEntity shape = PlayerShape.getCurrentShape(player);
 
         if (shape != null && Shapes.CONFIG.enableFlight
-                && (TraitRegistry.has(shape, FlyingTrait.ID) || shape instanceof FlyingAnimal)) {
+                && (TraitRegistry.has(shape, FlyingTrait.ID) || isFlyingAnimal(shape))) {
             List<String> requiredAdvancements = Shapes.CONFIG.advancementsRequiredForFlight;
 
             // requires at least 1 advancement, check if player has them

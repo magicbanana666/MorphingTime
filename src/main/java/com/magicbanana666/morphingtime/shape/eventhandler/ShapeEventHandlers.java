@@ -1,6 +1,7 @@
 package com.magicbanana666.morphingtime.shape.eventhandler;
 
-import com.mojang.datafixers.util.Either;
+
+import net.minecraft.world.entity.EntityTypes;import com.mojang.datafixers.util.Either;
 import com.magicbanana666.morphingtime.core.event.common.EntityEvents;
 import com.magicbanana666.morphingtime.core.event.common.PlayerEvents;
 import com.magicbanana666.morphingtime.shape.Shapes;
@@ -168,7 +169,7 @@ public class ShapeEventHandlers {
             if (!entity.level().isClientSide()) {
                 if (entity instanceof Villager villager && damageSource.getEntity() instanceof Player player && PlayerShape.getCurrentShape(player) instanceof Zombie) {
                     if (!(player.level().getDifficulty() != Difficulty.HARD && player.getRandom().nextBoolean())) {
-                        villager.convertTo(EntityType.ZOMBIE_VILLAGER, ConversionParams.single(villager, false, false), zombieVillager -> {
+                        villager.convertTo(EntityTypes.ZOMBIE_VILLAGER, ConversionParams.single(villager, false, false), zombieVillager -> {
                             zombieVillager.finalizeSpawn((ServerLevelAccessor) player.level(), ((net.minecraft.server.level.ServerLevel) player.level()).getCurrentDifficultyAt(zombieVillager.blockPosition()), EntitySpawnReason.CONVERSION, new Zombie.ZombieGroupData(false, true));
                             zombieVillager.setTradeOffers(villager.getOffers());
                             zombieVillager.setVillagerData(villager.getVillagerData());

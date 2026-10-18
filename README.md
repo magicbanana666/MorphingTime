@@ -4,12 +4,12 @@
 you get its shape, its size, its health and its abilities. Fly as a bat, climb walls as a spider, breathe
 under water as a fish, throw fireballs as a blaze.
 
-Morphing Time is for **Minecraft 26.1.2 on NeoForge** and is **one single jar without dependencies**.
+Morphing Time is for **Minecraft 26.2 on NeoForge** and is **one single jar without dependencies**.
 
 ## Install
 
-1. Download `MorphingTime-26.1.2-x.y.z.jar` from [Releases](https://github.com/magicbanana666/MorphingTime/releases).
-2. Put it in the `mods` folder (NeoForge 26.1.2.115 or newer). Needed on the client and on the server.
+1. Download `MorphingTime-26.2-x.y.z.jar` from [Releases](https://github.com/magicbanana666/MorphingTime/releases).
+2. Put it in the `mods` folder (NeoForge 26.2.0.93 or newer). Needed on the client and on the server.
 
 ## How to play
 

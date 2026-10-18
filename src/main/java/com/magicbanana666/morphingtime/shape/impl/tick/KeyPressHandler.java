@@ -53,7 +53,7 @@ public class KeyPressHandler implements ClientTickEvents.Client {
                         } else if (Shapes.CONFIG.show_variants_menu_guide) {
                             client.player.sendOverlayMessage(Component.translatable("walkers.variants_menu_guide", ShapesClient.VARIANTS_MENU_KEY.getTranslatedKeyMessage()));
                             Shapes.CONFIG.show_variants_menu_guide = false;
-                            if (client.isSingleplayer()) {
+                            if ((client.getSingleplayerServer() != null && !client.getSingleplayerServer().isPublished())) {
                                 Shapes.CONFIG.save();
                             }
                         }
@@ -66,7 +66,7 @@ public class KeyPressHandler implements ClientTickEvents.Client {
             }
 
             // disable variants menu when in other menu
-            if (ShapesClient.isRenderingVariantsMenu && (client.options.hideGui || !Shapes.CONFIG.unlockEveryVariant || client.screen != null || PlayerShape.getCurrentShape(client.player) == null))
+            if (ShapesClient.isRenderingVariantsMenu && (client.gui.hud.isHidden() || !Shapes.CONFIG.unlockEveryVariant || client.gui.screen() != null || PlayerShape.getCurrentShape(client.player) == null))
                 ShapesClient.isRenderingVariantsMenu = false;
 
             if (ShapesClient.UNLOCK_KEY.isDown()) {
