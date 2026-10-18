@@ -55,7 +55,7 @@ public class TraitLegendScreen extends Screen {
 
     @Override
     public void onClose() {
-        Minecraft.getInstance().setScreen(new MorphMenu());
+        Minecraft.getInstance().gui.setScreen(new MorphMenu());
     }
 
     @Override

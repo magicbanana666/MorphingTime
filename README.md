@@ -4,11 +4,11 @@
 you get its shape, its size, its health and its abilities. Fly as a bat, climb walls as a spider, breathe
 under water as a fish, throw fireballs as a blaze.
 
-Morphing Time is for **Minecraft 26.1.2 on Fabric** and is **one single jar**, it only needs Fabric API.
+Morphing Time is for **Minecraft 26.2 on Fabric** and is **one single jar**, it only needs Fabric API.
 
 ## Install
 
-1. Download `MorphingTime-FABRIC-26.1.2-x.y.z.jar` from [Releases](https://github.com/magicbanana666/MorphingTime/releases).
+1. Download `MorphingTime-FABRIC-26.2-x.y.z.jar` from [Releases](https://github.com/magicbanana666/MorphingTime/releases).
 2. Put it in the `mods` folder together with [Fabric API](https://modrinth.com/mod/fabric-api) (Fabric Loader 0.19.5 or newer). Needed on the client and on the server.
 
 ## How to play

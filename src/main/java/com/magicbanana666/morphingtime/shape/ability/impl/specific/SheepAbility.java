@@ -29,6 +29,6 @@ public class SheepAbility<T extends Sheep> extends GrassEaterAbility<T> {
 
     @Override
     public Item getIcon() {
-        return Items.WHITE_WOOL;
+        return Items.WOOL.white();
     }
 }

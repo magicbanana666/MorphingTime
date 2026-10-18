@@ -15,6 +15,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntitySpawnRequest;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -47,7 +48,7 @@ public class SwapVariantPackets {
 
                                 nbt.putBoolean("isSpecial", true);
                                 nbt.putString("id", EntityType.getKey(currentShapeType.getEntityType()).toString());
-                                created = EntityType.loadEntityRecursive(nbt, context.getPlayer().level(), EntitySpawnReason.LOAD, it -> it);
+                                created = EntityType.loadEntityRecursive(nbt, context.getPlayer().level(), new EntitySpawnRequest(EntitySpawnReason.LOAD, false), it -> it);
                                 PlayerShape.updateShapes((ServerPlayer) context.getPlayer(), (LivingEntity) created);
                             }
                             // switch normally

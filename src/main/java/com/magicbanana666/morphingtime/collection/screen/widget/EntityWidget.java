@@ -11,11 +11,9 @@ import com.magicbanana666.morphingtime.shape.ability.ShapeAbility;
 import com.magicbanana666.morphingtime.shape.traits.ShapeTrait;
 import com.magicbanana666.morphingtime.shape.traits.TraitIcons;
 import com.magicbanana666.morphingtime.shape.traits.TraitRegistry;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -122,8 +120,6 @@ public class EntityWidget<T extends LivingEntity> extends ShapeWidget {
         } catch (Exception e) {
             MorphCollection.LOGGER.error("Error while rendering {}", ShapeType.createTooltipText(entity).getString(), e);
             setCrashed();
-            MultiBufferSource.BufferSource immediate = Minecraft.getInstance().renderBuffers().bufferSource();
-            immediate.endBatch();
             RenderSystem.getModelViewStack().popMatrix();
         }
     }

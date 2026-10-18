@@ -8,9 +8,10 @@ import com.magicbanana666.morphingtime.shape.network.impl.SwapPackets;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.model.player.PlayerModel;
+import net.minecraft.client.model.Model;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.PlayerSkin;
 import org.jetbrains.annotations.NotNull;
@@ -20,11 +21,11 @@ public class SkinWidget extends ShapeWidget {
     private final GameProfile skinProfile;
     private final int size;
     private final PlayerSkin playerSkin;
-    private final PlayerModel model;
+    private final Model.Simple model;
 
-    public SkinWidget(int x, int y, int width, int height, @NotNull GameProfile skinProfile, PlayerSkin playerSkin, PlayerModel model, Screen parent, boolean isFavorite, boolean isCurrent, int availability) {
+    public SkinWidget(int x, int y, int width, int height, @NotNull GameProfile skinProfile, PlayerSkin playerSkin, Model.Simple model, Screen parent, boolean isFavorite, boolean isCurrent, int availability) {
         super(x, y, width, height, parent, isFavorite, isCurrent, availability);
-        this.size = (int) (MorphCollection.CONFIG.entity_size * (1 / (Math.max(EntityType.PLAYER.getHeight(), EntityType.PLAYER.getWidth()))));
+        this.size = (int) (MorphCollection.CONFIG.entity_size * (1 / (Math.max(EntityTypes.PLAYER.getHeight(), EntityTypes.PLAYER.getWidth()))));
         this.skinProfile = skinProfile;
         this.playerSkin = playerSkin;
         this.model = model;

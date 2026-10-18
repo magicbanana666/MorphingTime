@@ -18,6 +18,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntitySpawnRequest;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -45,7 +46,7 @@ public class VariantMenu implements RenderEvents.HUDRendering {
     @Override
     public void extractRenderState(GuiGraphicsExtractor guiGraphics, DeltaTracker delta) {
         Minecraft minecraft = Minecraft.getInstance();
-        if (!minecraft.options.hideGui && ShapesClient.isRenderingVariantsMenu && Shapes.CONFIG.unlockEveryVariant && minecraft.screen == null) {
+        if (!minecraft.gui.hud.isHidden() && ShapesClient.isRenderingVariantsMenu && Shapes.CONFIG.unlockEveryVariant && minecraft.gui.screen() == null) {
             Level level = minecraft.level;
             if (level != null && minecraft.player != null) {
                 ShapeType<?> currentShapeType = ShapeType.from(PlayerShape.getCurrentShape(minecraft.player));
@@ -87,7 +88,7 @@ public class VariantMenu implements RenderEvents.HUDRendering {
 
                                 nbt.putBoolean("isSpecial", true);
                                 nbt.putString("id", EntityType.getKey(type.getEntityType()).toString());
-                                return (LivingEntity) EntityType.loadEntityRecursive(nbt, level, EntitySpawnReason.LOAD, it -> it);
+                                return (LivingEntity) EntityType.loadEntityRecursive(nbt, level, new EntitySpawnRequest(EntitySpawnReason.LOAD, false), it -> it);
                             });
                         } else if ((variant > -1 || (hasSpecialVariant && variant == -1)) && (variant < range || variant == currVariant)) {
                             ShapeType<?> thisShapeType = ShapeType.from(currentShapeType.getEntityType(), variant);

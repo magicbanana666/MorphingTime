@@ -7,6 +7,7 @@ import com.magicbanana666.morphingtime.shape.integrations.Integrations;
 import com.magicbanana666.morphingtime.shape.traits.TraitRegistry;
 import com.magicbanana666.morphingtime.shape.traits.impl.FearedTrait;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -50,7 +51,7 @@ public abstract class ActiveTargetGoalMixin extends TrackTargetGoalMixin {
                     }
 
                     // polar bears should ignore polar bears
-                    if (this.mob instanceof PolarBear && shape.getType().equals(EntityType.POLAR_BEAR)) {
+                    if (this.mob instanceof PolarBear && shape.getType().equals(EntityTypes.POLAR_BEAR)) {
                         this.stop();
                         ci.cancel();
                     }
@@ -64,7 +65,7 @@ public abstract class ActiveTargetGoalMixin extends TrackTargetGoalMixin {
                     // hostile mobs (besides wither) should not target players morphed as hostile mobs
                     else if (!(this.mob instanceof WitherBoss) && (shape instanceof Enemy || Shapes.CONFIG.hostilesIgnoreNotHostileShapedPlayer)) {
                         // endermen should attack endermites
-                        if (this.mob instanceof EnderMan && shape.getType().equals(EntityType.ENDERMITE)) {
+                        if (this.mob instanceof EnderMan && shape.getType().equals(EntityTypes.ENDERMITE)) {
                             return;
                         }
 

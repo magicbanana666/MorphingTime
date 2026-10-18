@@ -16,7 +16,7 @@ import java.io.File;
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin {
     @Inject(method = "crash", at = @At("HEAD"))
-    private static void onCrash(Minecraft minecraft, File gameDirectory, @NotNull CrashReport report, CallbackInfo ci) {
+    private static void onCrash(Minecraft minecraft, File gameDirectory, @NotNull CrashReport report, int exitCode, CallbackInfo ci) {
         StringBuilder crashReportBuilder = new StringBuilder();
         TraceUtils.printMixinTrace(report.getException().getStackTrace(), crashReportBuilder);
         System.out.println(crashReportBuilder);

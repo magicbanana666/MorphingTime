@@ -20,7 +20,7 @@ public class MouseHandlerMixin {
 
     @WrapOperation(method = "onScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/ScrollWheelHandler;getNextScrollWheelSelection(DII)I"))
     private int handleScrollInVariantsMenu(double direction, int current, int size, Operation<Integer> original) {
-        if (!minecraft.options.hideGui && ShapesClient.isRenderingVariantsMenu && Shapes.CONFIG.unlockEveryVariant && minecraft.screen == null) {
+        if (!minecraft.gui.hud.isHidden() && ShapesClient.isRenderingVariantsMenu && Shapes.CONFIG.unlockEveryVariant && minecraft.gui.screen() == null) {
             ShapesClient.variantOffset -= (int) direction;
             return current;
         } else {

@@ -6,7 +6,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.magicbanana666.morphingtime.shape.Shapes;
 import com.magicbanana666.morphingtime.shape.traits.ShapeTrait;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -87,7 +87,7 @@ public class MobEffectTrait<E extends LivingEntity> extends ShapeTrait<E> {
     
     @Override
     public boolean renderIcon(RenderPipeline pipeline, @NotNull GuiGraphicsExtractor graphics, int x, int y, int width, int height) {
-        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, Gui.getMobEffectSprite(mobEffectInstance.getEffect()), x, y, width, height);
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, Hud.getMobEffectSprite(mobEffectInstance.getEffect()), x, y, width, height);
         return true;
     }
 }
