@@ -22,15 +22,15 @@ public class ServerLevelMixin {
             method = "tick",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/world/clock/ServerClockManager;moveToTimeMarker(Lnet/minecraft/core/Holder;Lnet/minecraft/resources/ResourceKey;)Z"
+                    target = "Lnet/minecraft/world/clock/ServerClockManager;moveToTimeMarker(Lnet/minecraft/core/Holder;Lnet/minecraft/resources/ResourceKey;)Lnet/minecraft/world/clock/ServerClockManager$MoveResult;"
             )
     )
-    private boolean sleepFinishedTime(ServerClockManager clockManager, Holder<WorldClock> clock, ResourceKey<ClockTimeMarker> marker, Operation<Boolean> original) {
+    private ServerClockManager.MoveResult sleepFinishedTime(ServerClockManager clockManager, Holder<WorldClock> clock, ResourceKey<ClockTimeMarker> marker, Operation<ServerClockManager.MoveResult> original) {
         ServerLevel level = (ServerLevel) (Object) this;
         Optional<Long> newTime = PlayerEvents.SLEEP_FINISHED_TIME.invoke().setWakeUpTime(level, level.getOverworldClockTime(), -1);
         if (newTime.isPresent()) {
             clockManager.setTotalTicks(clock, newTime.get());
-            return true;
+            return ServerClockManager.MoveResult.MOVED;
         }
         return original.call(clockManager, clock, marker);
     }

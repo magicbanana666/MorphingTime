@@ -13,7 +13,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.polarbear.PolarBear;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.skeleton.WitherSkeleton;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
@@ -65,7 +65,7 @@ public abstract class ActiveTargetGoalMixin extends TrackTargetGoalMixin {
                     // hostile mobs (besides wither) should not target players morphed as hostile mobs
                     else if (!(this.mob instanceof WitherBoss) && (shape instanceof Enemy || Shapes.CONFIG.hostilesIgnoreNotHostileShapedPlayer)) {
                         // endermen should attack endermites
-                        if (this.mob instanceof EnderMan && shape.getType().equals(EntityTypes.ENDERMITE)) {
+                        if (this.mob instanceof Enderman && shape.getType().equals(EntityTypes.ENDERMITE)) {
                             return;
                         }
 

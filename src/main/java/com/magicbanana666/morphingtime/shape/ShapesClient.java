@@ -17,7 +17,6 @@ import com.magicbanana666.morphingtime.shape.screen.hud.VariantMenu;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.ApiStatus;
-import org.lwjgl.glfw.GLFW;
 
 
 public class ShapesClient {
@@ -26,10 +25,10 @@ public class ShapesClient {
     public static int variantOffset = 0;
 
     public static final KeyMapping.Category MORPH_CATEGORY = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("walkers", "category"));
-    public static final KeyMapping UNLOCK_KEY = new KeyMapping("key.walkers_unlock", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_U, MORPH_CATEGORY);
-    public static final KeyMapping TRANSFORM_KEY = new KeyMapping("key.walkers", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, MORPH_CATEGORY);
-    public static final KeyMapping ABILITY_KEY = new KeyMapping("key.walkers_ability", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, MORPH_CATEGORY);
-    public static final KeyMapping VARIANTS_MENU_KEY = new KeyMapping("key.walkers_variants", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_J, MORPH_CATEGORY);
+    public static final KeyMapping UNLOCK_KEY = new KeyMapping("key.walkers_unlock", InputConstants.Type.KEYBOARD, InputConstants.KEY_U, MORPH_CATEGORY);
+    public static final KeyMapping TRANSFORM_KEY = new KeyMapping("key.walkers", InputConstants.Type.KEYBOARD, InputConstants.KEY_R, MORPH_CATEGORY);
+    public static final KeyMapping ABILITY_KEY = new KeyMapping("key.walkers_ability", InputConstants.Type.KEYBOARD, InputConstants.KEY_V, MORPH_CATEGORY);
+    public static final KeyMapping VARIANTS_MENU_KEY = new KeyMapping("key.walkers_variants", InputConstants.Type.KEYBOARD, InputConstants.KEY_J, MORPH_CATEGORY);
 
 
     public void initialize() {

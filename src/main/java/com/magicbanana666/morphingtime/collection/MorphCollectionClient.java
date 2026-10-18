@@ -11,13 +11,12 @@ import com.magicbanana666.morphingtime.collection.network.ClientNetworking;
 import com.magicbanana666.morphingtime.collection.tick.KeyPressHandler;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
-import org.lwjgl.glfw.GLFW;
 
 
 public class MorphCollectionClient {
     public static final KeyMapping.Category MORPH_MENU_CATEGORY = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("remorphed", "category"));
-    public static final KeyMapping MENU_KEY = new KeyMapping("key.remorphed_menu", InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_K, MORPH_MENU_CATEGORY);
+    public static final KeyMapping MENU_KEY = new KeyMapping("key.remorphed_menu", InputConstants.Type.KEYBOARD,
+            InputConstants.KEY_K, MORPH_MENU_CATEGORY);
 
     public void initialize() {
         KeyBindingRegistry.register(MENU_KEY);

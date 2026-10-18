@@ -120,7 +120,7 @@ public class EntityRenderCache {
     private static void prepareStaticEntity(Mob mob) {
         // Disable AI and make invulnerable to prevent any updates
         mob.setNoAi(true);
-        mob.setInvulnerable(true);
+        mob.setPermanentlyInvulnerable(true);
 
         // Fix slimes and magma cubes - set to smallest size
         if (mob instanceof Slime slime) {
