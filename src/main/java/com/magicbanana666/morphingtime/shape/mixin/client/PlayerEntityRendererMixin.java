@@ -8,6 +8,7 @@ import com.magicbanana666.morphingtime.shape.Shapes;
 import com.magicbanana666.morphingtime.shape.api.PlayerShape;
 import com.magicbanana666.morphingtime.shape.api.model.ArmRenderingManipulator;
 import com.magicbanana666.morphingtime.shape.api.model.EntityArms;
+import com.magicbanana666.morphingtime.shape.impl.ShapeAvatarRenderer;
 import com.magicbanana666.morphingtime.shape.impl.ShapeRenderStateProvider;
 import com.magicbanana666.morphingtime.shape.mixin.accessor.EntityAccessor;
 import com.magicbanana666.morphingtime.shape.mixin.accessor.LivingEntityAccessor;
@@ -37,8 +38,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
-import net.neoforged.neoforge.client.event.RenderPlayerEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -52,7 +51,7 @@ import java.util.Objects;
 @SuppressWarnings({"rawtypes", "unchecked"})
 
 @Mixin(value = AvatarRenderer.class, priority = 1001)
-public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<AbstractClientPlayer, AvatarRenderState, PlayerModel> {
+public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<AbstractClientPlayer, AvatarRenderState, PlayerModel> implements ShapeAvatarRenderer {
     private PlayerEntityRendererMixin(EntityRendererProvider.Context ctx, PlayerModel model, float shadowRadius) {
         super(ctx, model, shadowRadius);
     }
@@ -232,42 +231,32 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
         return showName;
     }
 
-    // Draws the shape instead of the player. Injected right before the model is drawn (instead of overriding the
-    // method or cancelling at the start) so NeoForge's RenderPlayerEvent.Pre still fires first and can cancel it.
-    // Cancelling skips the RenderPlayerEvent.Post at the end of the method, so that one is fired here instead.
-    @Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V"),
-            cancellable = true)
-    private void submitShape(AvatarRenderState state, PoseStack matrixStack, SubmitNodeCollector buffer, CameraRenderState camera, CallbackInfo ci) {
+    // Draws the shape instead of the player. Vanilla AvatarRenderer doesn't override submit, so this is called by
+    // LivingEntityRendererMixin at the start of LivingEntityRenderer.submit, right before the player model is drawn.
+    // Returns true when the player model must be skipped.
+    @Override
+    public boolean shape$submitShape(AvatarRenderState state, PoseStack matrixStack, SubmitNodeCollector buffer, CameraRenderState camera) {
         // While the player model is captured for the morph animation, draw the plain player
         if (MorphTransitions.CAPTURING.get()) {
-            return;
+            return false;
         }
         if (((ShapeRenderStateProvider) state).shape$getInvisRide()) {
-            shape$skipPlayerModel(state, matrixStack, buffer, ci);
-            return;
+            return true;
         }
 
         if (!state.isSpectator && !state.isInvisibleToPlayer && !state.isInvisible) {
             EntityRenderer<@NotNull LivingEntity, @NotNull EntityRenderState> shapeRenderer = ((ShapeRenderStateProvider) state).shape$getShapeRenderer();
             EntityRenderState shapeRenderState = shapeRenderer != null ? ((ShapeRenderStateProvider) state).shape$getShapeRenderState() : null;
             if (MorphTransitions.render((AvatarRenderer) (Object) this, state, shapeRenderer, shapeRenderState, matrixStack, buffer, camera)) {
-                shape$skipPlayerModel(state, matrixStack, buffer, ci);
-                return;
+                return true;
             }
             if (shapeRenderer != null && shapeRenderState != null) {
                 shapeRenderer.submit(shapeRenderState, matrixStack, buffer, camera);
                 state.shadowRadius = shapeRenderState.shadowRadius;
-                shape$skipPlayerModel(state, matrixStack, buffer, ci);
+                return true;
             }
         }
-    }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    @Unique
-    private void shape$skipPlayerModel(AvatarRenderState state, PoseStack matrixStack, SubmitNodeCollector buffer, CallbackInfo ci) {
-        ci.cancel();
-        NeoForge.EVENT_BUS.post(new RenderPlayerEvent.Post(state, (AvatarRenderer) (Object) this, state.partialTick, matrixStack, buffer));
+        return false;
     }
 
     @Inject(method = "getRenderOffset(Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;)Lnet/minecraft/world/phys/Vec3;", at = @At("HEAD"), cancellable = true)

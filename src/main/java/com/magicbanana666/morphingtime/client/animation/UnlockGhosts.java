@@ -23,7 +23,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.event.SubmitCustomGeometryEvent;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
 
 /**
  * The unlock animation: a glowing copy of the mob you just unlocked flies into you and shrinks away.
@@ -65,7 +65,7 @@ public final class UnlockGhosts {
         }
     }
 
-    public static void onSubmitCustomGeometry(SubmitCustomGeometryEvent event) {
+    public static void onCollectSubmits(LevelRenderContext context) {
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
         if (GHOSTS.isEmpty() || player == null || minecraft.level == null) {
@@ -73,9 +73,9 @@ public final class UnlockGhosts {
         }
         float partial = minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false);
         float now = minecraft.level.getGameTime() + partial;
-        Vec3 camera = event.getLevelRenderState().cameraRenderState.pos;
+        Vec3 camera = context.levelState().cameraRenderState.pos;
         Vec3 target = player.getPosition(partial).add(0, player.getBbHeight() * 0.4, 0);
-        PoseStack poseStack = event.getPoseStack();
+        PoseStack poseStack = context.poseStack();
 
         Iterator<Ghost> it = GHOSTS.iterator();
         while (it.hasNext()) {
@@ -103,7 +103,7 @@ public final class UnlockGhosts {
             poseStack.scale(scale, scale, scale);
             poseStack.translate(0, -ghost.height() / 2F, 0);
             List<CapturedCube> cubes = ghost.cubes();
-            event.getSubmitNodeCollector().submitCustomGeometry(poseStack, RenderTypes.entityTranslucentEmissive(MorphTransitions.TEXTURE), (pose, consumer) -> {
+            context.submitNodeCollector().submitCustomGeometry(poseStack, RenderTypes.entityTranslucentEmissive(MorphTransitions.TEXTURE), (pose, consumer) -> {
                 for (CapturedCube cube : cubes) {
                     cube.draw(pose, consumer, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, color, 0, 0, 16, 16, 0F);
                 }

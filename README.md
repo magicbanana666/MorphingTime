@@ -4,12 +4,12 @@
 you get its shape, its size, its health and its abilities. Fly as a bat, climb walls as a spider, breathe
 under water as a fish, throw fireballs as a blaze.
 
-Morphing Time is for **Minecraft 26.1.2 on NeoForge** and is **one single jar without dependencies**.
+Morphing Time is for **Minecraft 26.1.2 on Fabric** and is **one single jar**, it only needs Fabric API.
 
 ## Install
 
-1. Download `MorphingTime-26.1.2-x.y.z.jar` from [Releases](https://github.com/magicbanana666/MorphingTime/releases).
-2. Put it in the `mods` folder (NeoForge 26.1.2.115 or newer). Needed on the client and on the server.
+1. Download `MorphingTime-FABRIC-26.1.2-x.y.z.jar` from [Releases](https://github.com/magicbanana666/MorphingTime/releases).
+2. Put it in the `mods` folder together with [Fabric API](https://modrinth.com/mod/fabric-api) (Fabric Loader 0.19.5 or newer). Needed on the client and on the server.
 
 ## How to play
 
@@ -96,7 +96,8 @@ The files are in `config/morphingtime/`:
 
 With `usePermissions` on (in `unlocking.json5`), a permission mod can use the nodes `morphingtime.morph`,
 `morphingtime.type.minecraft.pig`, `morphingtime.command.addshape`, `morphingtime.skin.command.set`, ...
-(see `/morph list-permissions` and `/morph skin list-permissions`).
+(see `/morph list-permissions` and `/morph skin list-permissions`). They are checked through the Fabric Permission API;
+without a permission mod they are given to operators.
 
 Unlocked morphs are yours forever by default. Set `killValue` (mobs) or `playerKillValue` (players) in
 `unlocking.json5` to make a morph get used up after that many morphs per kill.
@@ -109,7 +110,7 @@ Traits, abilities and variants can be changed with data packs (`data/<namespace>
 ./gradlew build
 ```
 
-Needs JDK 25. `./gradlew runClient -PwithHats` starts a dev client with Hats Reinvented (needs its jars built locally).
+Needs JDK 25. The jar ends up in `~/.gradle-builds/MorphingTime-Fabric/libs`. `./gradlew runClient -PextraMods=<jar>;<jar>` starts a dev client with other mods.
 
 ## License
 

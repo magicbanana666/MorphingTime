@@ -40,13 +40,13 @@ public abstract class WolfEntityMixin extends TamableAnimal {
     // Stored in a data attachment so the vanilla wolf's synced entity data stays untouched
     @Unique
     private boolean shape$isSpecial() {
-        return ((Entity) (Object) this).getData(com.magicbanana666.morphingtime.MorphingTimeAttachments.SPECIAL_WOLF);
+        return ((Entity) (Object) this).getAttachedOrElse(com.magicbanana666.morphingtime.MorphingTimeAttachments.SPECIAL_WOLF, false);
     }
 
     @Unique
     private void shape$setSpecial(boolean special) {
         if (special != this.shape$isSpecial()) {
-            ((Entity) (Object) this).setData(com.magicbanana666.morphingtime.MorphingTimeAttachments.SPECIAL_WOLF, special);
+            ((Entity) (Object) this).setAttached(com.magicbanana666.morphingtime.MorphingTimeAttachments.SPECIAL_WOLF, special);
         }
     }
 

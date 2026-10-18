@@ -202,7 +202,7 @@ public abstract class PlayerEntityDataMixin extends LivingEntity implements Play
         this.shape$shape = shape;
         if (shape != null) {
             // Tag the shape with its player so other mods (EG Hats Reinvented) can find who is behind it
-            shape.getPersistentData().putString("morphreinvented:player", ((Player) (Object) this).getUUID().toString());
+            shape.setAttached(com.magicbanana666.morphingtime.MorphingTimeAttachments.SHAPE_PLAYER, ((Player) (Object) this).getUUID().toString());
         }
     }
 

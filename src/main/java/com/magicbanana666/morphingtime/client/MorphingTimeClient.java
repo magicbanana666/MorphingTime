@@ -2,19 +2,16 @@ package com.magicbanana666.morphingtime.client;
 
 import com.magicbanana666.morphingtime.UnlockEffectPayload;
 import com.magicbanana666.morphingtime.client.animation.UnlockGhosts;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 
-/** Client side setup: the unlock animation. */
-public final class MorphingTimeClient {
+/** Client side setup: the unlock animation. The client side of the modules is initialized by the main entry point. */
+public final class MorphingTimeClient implements ClientModInitializer {
 
-    private MorphingTimeClient() {
-    }
-
-    public static void init(IEventBus modBus) {
-        modBus.addListener(RegisterClientPayloadHandlersEvent.class, event ->
-                event.register(UnlockEffectPayload.TYPE, (payload, context) -> UnlockGhosts.start(payload.entityId())));
-        NeoForge.EVENT_BUS.addListener(UnlockGhosts::onSubmitCustomGeometry);
+    @Override
+    public void onInitializeClient() {
+        ClientPlayNetworking.registerGlobalReceiver(UnlockEffectPayload.TYPE, (payload, context) -> UnlockGhosts.start(payload.entityId()));
+        LevelRenderEvents.COLLECT_SUBMITS.register(UnlockGhosts::onCollectSubmits);
     }
 }

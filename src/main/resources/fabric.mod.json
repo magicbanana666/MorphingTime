@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_display_name}",
+  "description": "Kill mobs to unlock them, then morph into them: their shape, size, health, abilities and traits. Everything in one jar, only Fabric API needed.",
+  "authors": ["magicbanana666"],
+  "contact": {
+    "homepage": "https://github.com/magicbanana666/MorphingTime",
+    "sources": "https://github.com/magicbanana666/MorphingTime",
+    "issues": "https://github.com/magicbanana666/MorphingTime/issues"
+  },
+  "license": "Don't Be an Asshole License",
+  "icon": "pack.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.magicbanana666.morphingtime.MorphingTime"],
+    "client": ["com.magicbanana666.morphingtime.client.MorphingTimeClient"]
+  },
+  "mixins": [
+    "morphingtime-core.mixins.json",
+    "morphingtime-core-fabric.mixins.json",
+    "morphingtime-shape.mixins.json",
+    "morphingtime-shape-fabric.mixins.json",
+    "morphingtime-collection.mixins.json",
+    "morphingtime-skin.mixins.json"
+  ],
+  "accessWidener": "morphingtime.accesswidener",
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "${minecraft_dep}",
+    "java": ">=25",
+    "fabric-api": "*"
+  },
+  "breaks": {
+    "woodwalkers": "*",
+    "walkers": "*",
+    "remorphed": "*",
+    "craftedcore": "*",
+    "morphreinvented": "*",
+    "skinshifter": "*"
+  }
+}

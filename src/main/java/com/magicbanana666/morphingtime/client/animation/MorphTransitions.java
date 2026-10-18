@@ -75,7 +75,7 @@ public final class MorphTransitions {
             TRACKS.clear();
             lastLevel = Minecraft.getInstance().level;
         }
-        float now = Minecraft.getInstance().level.getGameTime() + state.partialTick;
+        float now = Minecraft.getInstance().level.getGameTime() + Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
         boolean isShape = shapeRenderer != null && shapeState != null;
         // Keyed by the entity type and not the renderer, renderers are created again when resources reload
         Object key = isShape ? shapeState.entityType : PLAYER;

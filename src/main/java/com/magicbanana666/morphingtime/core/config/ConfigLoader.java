@@ -144,6 +144,8 @@ public class ConfigLoader {
 
         try {
             if (!Files.exists(file)) {
+                // the first config can be written before anything else created config/morphingtime/
+                Files.createDirectories(file.getParent());
                 Files.createFile(file);
             }
 
